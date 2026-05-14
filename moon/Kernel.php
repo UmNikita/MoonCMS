@@ -7,6 +7,7 @@ use Moon\infrastructure\Registry\Container;
 use Moon\infrastructure\Config\ConfigManager;
 use Moon\infrastructure\Database\Database;
 use Moon\infrastructure\Http\HttpEngine;
+use Moon\infrastructure\ProviderDispatcher\ProviderDispatcher;
 use Moon\infrastructure\Render\ViewEngine;
 
 class Kernel {
@@ -24,6 +25,8 @@ class Kernel {
         Container::registry($config);
         $db = new Database('pgsql', 'localhost', '5432', 'test', 'postgres', 'sap');
         Container::registry($db);
+        $providerDispatcher = new ProviderDispatcher();
+        $providerDispatcher->boot();
     }
 
     private function proccessHttp() {

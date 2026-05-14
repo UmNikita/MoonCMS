@@ -11,8 +11,14 @@ class Router {
     {
         $config = Container::get(ConfigManager::class);
         $routConf = $config->get('routes.'.$request->rout);
+        
         if($routConf) {
-            $rout = new Route(controller: $routConf['controller'], action: $routConf['action']);
+            if(array_key_exists('kernelDir', $routConf)) {
+                $rout = new Route(controller: $routConf['controller'], action: $routConf['action'], kernelDir: $routConf['kernelDir']);
+            }
+            else {
+                $rout = new Route(controller: $routConf['controller'], action: $routConf['action']);
+            }
         }
         else {
             $rout = new Route(TypeRoute::NotFound);

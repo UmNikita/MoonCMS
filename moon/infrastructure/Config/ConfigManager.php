@@ -75,6 +75,19 @@ class ConfigManager {
         $target = $value;
     }
     
+    public function add(string $path, $value): void
+    {
+        $target = &$this->resolve($path, true);
+        
+        if (is_array($target) && is_array($value)) {
+            $target = array_merge_recursive($target, $value);
+        } elseif (is_array($target)) {
+            $target[] = $value;
+        } else {
+            $target = $value;
+        }
+    }
+
     public function has(string $path): bool
     {
         $value = &$this->resolve($path);

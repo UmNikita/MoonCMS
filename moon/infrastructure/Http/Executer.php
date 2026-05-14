@@ -12,15 +12,9 @@ class Executer {
     public function execRoute(Route $route): Response
     {
         $pathResolver = Container::get(PathResolver::class);
-        $dir = $pathResolver->getFileFromDirectoryFramework(PathDirectoryType::Local);
-
-        $controllersDir = $dir . 'Controllers/';
-
-        if (!is_dir($controllersDir))
-            throw new ControllerException("Директория контроллеров не найдена: " . $controllersDir);
-
         $controllerName = $route->controller;
-        $controllerFile = $controllersDir . $controllerName . '.php';
+        $controllerFile = $this->getControllerFile($pathResolver, $route);
+
         if (!file_exists($controllerFile))
             throw new ControllerException("Контроллер '{$controllerName}' не найден по пути: {$controllerFile}");
 
@@ -36,6 +30,22 @@ class Executer {
             throw new ControllerException("Метод '{$methodName}' не найден в контроллере '{$controllerName}'");
         
         $response = call_user_func_array([$controller, $methodName], []);
+        if ($route->kernelDir != null)
+            $response->setKernelDir($route->kernelDir);
+
         return $response;
+    }
+
+    private function getControllerFile(PathResolver $pathResolver, Route $route): string {
+        if($route->kernelDir == null)
+            $controllersDir = $pathResolver->getFileFromDirectoryFramework(PathDirectoryType::Local, 'Controllers/');
+        else
+            $controllersDir = $pathResolver->getFileFromDirectoryFramework(PathDirectoryType::Kernel, 'mvc/'.$route->kernelDir.'/Controllers/');
+        
+        if (!is_dir($controllersDir))
+            throw new ControllerException("Директория контроллеров не найдена: " . $controllersDir);
+
+        $controllerName = $route->controller;
+        return $controllersDir . $controllerName . '.php';
     }
 }

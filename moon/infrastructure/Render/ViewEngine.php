@@ -14,16 +14,24 @@ class ViewEngine {
 
     public function __construct()
     {
-        $pathResolver = Container::get(PathResolver::class);
-        $path = $pathResolver->getFileFromDirectoryFramework(PathDirectoryType::Local, 'Templates');
-        $loader = new FilesystemLoader($path);
-        $this->twig = new Environment($loader);
+
     }
 
     public function render(Response $response): void
     {
+        $this->setEnviroment($response->getKernelDir());
         $template = $response->getTemplate();
         echo $this->twig->render($template . '.twig', []);
+    }
+
+    private function setEnviroment(?string $kernelDir = null) {
+        $pathResolver = Container::get(PathResolver::class);
+        if($kernelDir == null)
+            $path = $pathResolver->getFileFromDirectoryFramework(PathDirectoryType::Local, 'Templates');
+        else
+            $path = $pathResolver->getFileFromDirectoryFramework(PathDirectoryType::Kernel, 'mvc/'.$kernelDir.'/Templates/');
+        $loader = new FilesystemLoader($path);
+        $this->twig = new Environment($loader);
     }
 
     public function renderError(string $name, string $message) {
