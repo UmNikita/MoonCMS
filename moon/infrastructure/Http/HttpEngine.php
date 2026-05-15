@@ -26,6 +26,7 @@ class HttpEngine {
     public function pipeline(Request $request): Response {
         $route = $this->makeRoute($request);
         $response = $this->execRoute($route);
+        
         return $response;
     }
 

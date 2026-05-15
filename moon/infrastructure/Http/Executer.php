@@ -26,7 +26,7 @@ class Executer {
             throw new ControllerException("Директория контроллеров не найдена: " . $controllersDir);
 
         $controllerName = $route->controller;
-        $controllerFile = $this->getContorllerFile($this->pathResolver, $route);
+        $controllerFile = $this->getControllerFile($this->pathResolver, $route);
 
         if (!file_exists($controllerFile))
             throw new ControllerException("Контроллер '{$controllerName}' не найден по пути: {$controllerFile}");

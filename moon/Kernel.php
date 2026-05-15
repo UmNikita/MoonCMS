@@ -2,11 +2,11 @@
 
 namespace Moon;
 
-use Moon\infrastructure\PathResolver\PathResolver;
 use Moon\infrastructure\Config\ConfigManager;
 use Moon\infrastructure\Database\Database;
 use Moon\infrastructure\Http\HttpEngine;
 use Moon\infrastructure\DI\ServiceContainer;
+use Moon\infrastructure\PathResolver\PathResolver;
 use Moon\infrastructure\ProviderDispatcher\ProviderDispatcher;
 use Moon\infrastructure\Render\ViewEngine;
 
@@ -23,8 +23,7 @@ class Kernel {
         $config = $container->get(ConfigManager::class);
         $config->build();
         //$db = new Database('pgsql', 'localhost', '5432', 'test', 'postgres', 'sap');
-        //Container::registry($db);
-        $providerDispatcher = new ProviderDispatcher();
+        $providerDispatcher = new ProviderDispatcher($container->get(PathResolver::class), $container);
         $providerDispatcher->boot();
     }
 
