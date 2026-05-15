@@ -12,9 +12,10 @@ class ConfigManager {
     private array $config;
     private PathResolver $pathResolver;
     
-    public function __construct()
+    public function __construct(PathResolver $pathResolver)
     {
-        $this->pathResolver = Container::get(PathResolver::class);
+        // $this->pathResolver = Container::get(PathResolver::class);
+        $this->pathResolver = $pathResolver;
         $configPath = $this->pathResolver->getFileFromDirectoryFramework(PathDirectoryType::Config);
         $configList = ['routes'];
         if(!$this->pathResolver->checkFilesWithExtension($configPath, $configList)) {

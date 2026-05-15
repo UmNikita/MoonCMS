@@ -2,17 +2,23 @@
 
 namespace Moon\infrastructure\Http;
 use Moon\infrastructure\Http\Route\Route;
-use Moon\infrastructure\Registry\Container;
 use Moon\infrastructure\PathResolver\PathResolver;
 use Moon\infrastructure\PathResolver\PathDirectoryType;
 use Moon\infrastructure\Exception\ControllerException;
 use Moon\infrastructure\Http\Response;
 
 class Executer {
+
+    private PathResolver $pathResolver;
+
+    public function __construct(PathResolver $pathResolver)
+    {
+        $this->pathResolver = $pathResolver;
+    }
+
     public function execRoute(Route $route): Response
     {
-        $pathResolver = Container::get(PathResolver::class);
-        $dir = $pathResolver->getFileFromDirectoryFramework(PathDirectoryType::Local);
+        $dir = $this->pathResolver->getFileFromDirectoryFramework(PathDirectoryType::Local);
 
         $controllersDir = $dir . 'Controllers/';
 
