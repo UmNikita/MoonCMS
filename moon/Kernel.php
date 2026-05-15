@@ -3,37 +3,36 @@
 namespace Moon;
 
 use Moon\infrastructure\PathResolver\PathResolver;
-use Moon\infrastructure\Registry\Container;
 use Moon\infrastructure\Config\ConfigManager;
 use Moon\infrastructure\Database\Database;
 use Moon\infrastructure\Http\HttpEngine;
+use Moon\infrastructure\DI\ServiceContainer;
 use Moon\infrastructure\ProviderDispatcher\ProviderDispatcher;
 use Moon\infrastructure\Render\ViewEngine;
 
 class Kernel {
 
     public function run() {
-        $this->startTechServices();
-        $this->proccessHttp();
+        $serviceContainer = new ServiceContainer();
+        $this->startTechServices($serviceContainer);
+        $this->proccessHttp($serviceContainer);
+        
     }
 
-    private function startTechServices() {
-        $pathResolver = new PathResolver();
-        Container::registry($pathResolver);
-        $config = new ConfigManager();
+    private function startTechServices(ServiceContainer $container) {
+        $config = $container->get(ConfigManager::class);
         $config->build();
-        Container::registry($config);
-        $db = new Database('pgsql', 'localhost', '5432', 'test', 'postgres', 'sap');
-        Container::registry($db);
+        //$db = new Database('pgsql', 'localhost', '5432', 'test', 'postgres', 'sap');
+        //Container::registry($db);
         $providerDispatcher = new ProviderDispatcher();
         $providerDispatcher->boot();
     }
 
-    private function proccessHttp() {
-        $httpEngine = new HttpEngine();
+    private function proccessHttp(ServiceContainer $container) {
+        $httpEngine = $container->get(HttpEngine::class);
         $request = $httpEngine->createCurrentRequest();
         $response = $httpEngine->pipeline($request);
-        $viewEngine = new ViewEngine();
+        $viewEngine = $container->get(ViewEngine::class);
         $viewEngine->render($response);
     }
 }

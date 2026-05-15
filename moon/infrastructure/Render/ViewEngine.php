@@ -3,7 +3,6 @@
 namespace Moon\infrastructure\Render;
 use Moon\infrastructure\Http\Response;
 use Moon\infrastructure\PathResolver\PathDirectoryType;
-use Moon\infrastructure\Registry\Container;
 use Moon\infrastructure\PathResolver\PathResolver;
 use Twig\Loader\FilesystemLoader;
 use Twig\Environment;
@@ -11,10 +10,13 @@ use Twig\Environment;
 class ViewEngine {
 
     private Environment $twig;
+    private PathResolver $pathResolver;
 
-    public function __construct()
+    public function __construct(PathResolver $pathResolver)
     {
-
+        $path = $pathResolver->getFileFromDirectoryFramework(PathDirectoryType::Local, 'Templates');
+        $this->pathResolver = $pathResolver;
+        $this->setEnviroment();
     }
 
     public function render(Response $response): void
@@ -25,11 +27,10 @@ class ViewEngine {
     }
 
     private function setEnviroment(?string $kernelDir = null) {
-        $pathResolver = Container::get(PathResolver::class);
         if($kernelDir == null)
-            $path = $pathResolver->getFileFromDirectoryFramework(PathDirectoryType::Local, 'Templates');
+            $path = $this->pathResolver->getFileFromDirectoryFramework(PathDirectoryType::Local, 'Templates');
         else
-            $path = $pathResolver->getFileFromDirectoryFramework(PathDirectoryType::Kernel, 'mvc/'.$kernelDir.'/Templates/');
+            $path = $this->pathResolver->getFileFromDirectoryFramework(PathDirectoryType::Kernel, 'mvc/'.$kernelDir.'/Templates/');
         $loader = new FilesystemLoader($path);
         $this->twig = new Environment($loader);
     }

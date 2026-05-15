@@ -2,16 +2,21 @@
 
 namespace Moon\infrastructure\Http;
 use Moon\infrastructure\Http\Route\Route;
-use Moon\infrastructure\Registry\Container;
 use Moon\infrastructure\Config\ConfigManager;
 use Moon\infrastructure\Http\Route\TypeRoute;
 
 class Router {
+
+    private ConfigManager $configManager;
+
+    public function __construct(ConfigManager $configManager)
+    {
+        $this->configManager = $configManager;
+    }
+
     public function handleRequest(Request $request): Route
     {
-        $config = Container::get(ConfigManager::class);
-        $routConf = $config->get('routes.'.$request->rout);
-        
+        $routConf = $this->configManager->get('routes.'.$request->rout);
         if($routConf) {
             if(array_key_exists('kernelDir', $routConf)) {
                 $rout = new Route(controller: $routConf['controller'], action: $routConf['action'], kernelDir: $routConf['kernelDir']);

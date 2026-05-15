@@ -2,24 +2,30 @@
 
 namespace Moon\infrastructure\Http;
 use Moon\infrastructure\Http\Request;
-use Moon\infrastructure\Registry\Container;
 use Moon\infrastructure\Http\Route\Route;
 use Moon\infrastructure\Http\Route\TypeRoute;
 use Moon\infrastructure\Http\Response;
 
 class HttpEngine {
 
+    private Router $router;
+    private Executer $executer;
+
+    public function __construct(Router $router, Executer $executer)
+    {
+        $this->router = $router;
+        $this->executer = $executer;
+    }
+
     public function createCurrentRequest(): Request {
-        $router = new Request();
-        $router->setStatesGlobals();
-        return $router;
+        $request = new Request();
+        $request->setStatesGlobals();
+        return $request;
     }
 
     public function pipeline(Request $request): Response {
-        Container::registry($request);
         $route = $this->makeRoute($request);
         $response = $this->execRoute($route);
-        Container::registry($response);
         return $response;
     }
 
@@ -27,13 +33,11 @@ class HttpEngine {
         if($route->type == TypeRoute::NotFound) {
             return $this->notFount();
         }
-        $executer = new Executer();
-        return $executer->execRoute($route);
+        return $this->executer->execRoute($route);
     }
 
     private function makeRoute(Request $request): Route {
-        $router = new Router();
-        return $router->handleRequest($request);
+        return $this->router->handleRequest($request);
     }
 
     private function notFount() {

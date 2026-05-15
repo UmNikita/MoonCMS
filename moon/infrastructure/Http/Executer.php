@@ -2,18 +2,31 @@
 
 namespace Moon\infrastructure\Http;
 use Moon\infrastructure\Http\Route\Route;
-use Moon\infrastructure\Registry\Container;
 use Moon\infrastructure\PathResolver\PathResolver;
 use Moon\infrastructure\PathResolver\PathDirectoryType;
 use Moon\infrastructure\Exception\ControllerException;
 use Moon\infrastructure\Http\Response;
 
 class Executer {
+
+    private PathResolver $pathResolver;
+
+    public function __construct(PathResolver $pathResolver)
+    {
+        $this->pathResolver = $pathResolver;
+    }
+
     public function execRoute(Route $route): Response
     {
-        $pathResolver = Container::get(PathResolver::class);
+        $dir = $this->pathResolver->getFileFromDirectoryFramework(PathDirectoryType::Local);
+
+        $controllersDir = $dir . 'Controllers/';
+
+        if (!is_dir($controllersDir))
+            throw new ControllerException("Директория контроллеров не найдена: " . $controllersDir);
+
         $controllerName = $route->controller;
-        $controllerFile = $this->getControllerFile($pathResolver, $route);
+        $controllerFile = $this->getContorllerFile($this->pathResolver, $route);
 
         if (!file_exists($controllerFile))
             throw new ControllerException("Контроллер '{$controllerName}' не найден по пути: {$controllerFile}");
