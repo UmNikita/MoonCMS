@@ -5,6 +5,9 @@ namespace Moon;
 use Moon\infrastructure\PathResolver\PathResolver;
 use Moon\infrastructure\Config\ConfigManager;
 use Moon\infrastructure\Database\Database;
+use Moon\infrastructure\Database\DatabaseFactory;
+use Moon\infrastructure\Database\QueryTable;
+use Moon\infrastructure\Database\builder\SQLBuilder;
 use Moon\infrastructure\Http\HttpEngine;
 use Moon\infrastructure\DI\ServiceContainer;
 use Moon\infrastructure\Render\ViewEngine;
@@ -21,8 +24,15 @@ class Kernel {
     private function startTechServices(ServiceContainer $container) {
         $config = $container->get(ConfigManager::class);
         $config->build();
-        //$db = new Database('pgsql', 'localhost', '5432', 'test', 'postgres', 'sap');
-        //Container::registry($db);
+        $databaseFactory = $container->get(DatabaseFactory::class);
+        $databaseFactory->create();
+        //$sqlBuilder = $container->get(SQLBuilder::class);
+        //$sql = $sqlBuilder->table('posts');
+        //print_r($sql->select(['ab', 'dx'])->limit(5)->distinct()->where('avb', 21, '>')->get());
+        //print_r($sql->insert(['ab' => 'dx', 'ag' => 'dx'])->save());
+        //print_r($sql->insertMany([['ab' => '1', 'ag' => '2'], ['ag' => '4', 'ab' => '3']])->save());
+        //print_r($sql->update(['ab' => '1', 'ag' => '2'])->where('abx', 12)->save());
+        //print_r($sql->delete()->where('abx', 12)->save());
     }
 
     private function proccessHttp(ServiceContainer $container) {
