@@ -1,8 +1,10 @@
 <?php
 
-namespace Moon\infrastructure\Http;
+namespace Moon\infrastructure\Http\Route;
+
 use Moon\infrastructure\Http\Route\Route;
 use Moon\infrastructure\Config\ConfigManager;
+use Moon\infrastructure\Http\Request;
 use Moon\infrastructure\Http\Route\TypeRoute;
 
 class Router {

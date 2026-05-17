@@ -7,6 +7,7 @@ use Moon\infrastructure\Config\ConfigManager;
 use Moon\infrastructure\Database\Database;
 use Moon\infrastructure\Http\HttpEngine;
 use Moon\infrastructure\DI\ServiceContainer;
+use Moon\infrastructure\Http\Request;
 use Moon\infrastructure\Render\ViewEngine;
 
 class Kernel {
@@ -27,7 +28,8 @@ class Kernel {
 
     private function proccessHttp(ServiceContainer $container) {
         $httpEngine = $container->get(HttpEngine::class);
-        $request = $httpEngine->createCurrentRequest();
+        $request = $container->get(Request::class);
+        $request->setStatesGlobals();
         $response = $httpEngine->pipeline($request);
         $viewEngine = $container->get(ViewEngine::class);
         $viewEngine->render($response);

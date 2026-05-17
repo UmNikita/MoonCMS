@@ -6,16 +6,20 @@ class Response {
 
     private int $statusCode;
     private string $template;
-    private array $headers;
+    private Headers $headers;
 
-    public function __construct($statusCode = 200, $template = 'Example', $headers = [])
+    public function __construct($statusCode = 200, $template = 'Example')
     {
         $this->statusCode = $statusCode;
         $this->template = $template;
-        $this->headers = $headers;
     }
-    public function getTemplate()
+
+    public function getTemplate(): string
     {
         return $this->template;
+    }
+
+    public function setTemplate(string $template) {
+        $this->template = $template;
     }
 }
