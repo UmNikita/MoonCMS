@@ -36,7 +36,6 @@ class Kernel {
         $httpEngine = $container->get(HttpEngine::class);
         $request = $this->environment->getRequest();
         $response = $httpEngine->pipeline($request);
-        $viewEngine = $container->get(ViewEngine::class);
-        $viewEngine->render($response);
+        $this->environment->response($response);
     }
 }
