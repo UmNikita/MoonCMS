@@ -1,9 +1,10 @@
 <?php
 
-use Moon\infrastructure\Http\Response;
+use Moon\infrastructure\Http\Controller;
 
-class TestController {
+class TestController extends Controller {
+    
     public function test() {
-        return new Response(template: 'layout');
+        return $this->template('layout');
     }
 }

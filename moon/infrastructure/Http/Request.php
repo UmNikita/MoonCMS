@@ -7,15 +7,15 @@ class Request {
     public string $rout;
     private string $method;
     private array $query_params;
-    private array $headers;
+    private Headers $headers;
     private $body = null;
 
-    public function setStatesGlobals()
+    public function setStates(string $rout, string $method, array $query_params, Headers $headers, $body = null)
     {
-        $this->rout = $_SERVER['REQUEST_URI'];
-        $this->method = $_SERVER['REQUEST_METHOD'];
-        $this->query_params = $_GET;
-        $this->headers = [1];
-        $this->body = null;
+        $this->rout = $rout;
+        $this->method = $method;
+        $this->query_params = $query_params;
+        $this->headers = $headers;
+        $this->body = $body;
     }
 }

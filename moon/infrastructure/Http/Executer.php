@@ -6,18 +6,31 @@ use Moon\infrastructure\PathResolver\PathResolver;
 use Moon\infrastructure\PathResolver\PathDirectoryType;
 use Moon\infrastructure\Exception\ControllerException;
 use Moon\infrastructure\Http\Response;
+use Moon\infrastructure\Http\Route\TypeRoute;
 
 class Executer {
 
     private PathResolver $pathResolver;
+    private Response $response;
 
-    public function __construct(PathResolver $pathResolver)
+    public function __construct(PathResolver $pathResolver, Response $response)
     {
         $this->pathResolver = $pathResolver;
+        $this->response = $response;
     }
 
     public function execRoute(Route $route): Response
     {
+        if($route->type == TypeRoute::NotFound) {
+            return new Response(template: '404');
+        }
+        $controllerName = $this->getController($route);
+        $controller = new $controllerName($this->response);
+        $response = $this->callMethodController($route, $controller, $controllerName);
+        return $response;
+    }
+
+    private function getController(Route $route) {
         $dir = $this->pathResolver->getFileFromDirectoryFramework(PathDirectoryType::Local);
 
         $controllersDir = $dir . 'Controllers/';
@@ -35,8 +48,10 @@ class Executer {
         if (!class_exists($controllerName))
             throw new ControllerException("Класс контроллера '{$controllerName}' не найден в файле");
         
-        $controller = new $controllerName();
+        return $controllerName;
+    }
 
+    private function callMethodController(Route $route, $controller, $controllerName) {
         $methodName = $route->action;
         if (!method_exists($controller, $methodName))
             throw new ControllerException("Метод '{$methodName}' не найден в контроллере '{$controllerName}'");
