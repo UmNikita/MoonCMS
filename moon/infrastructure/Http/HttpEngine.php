@@ -5,6 +5,7 @@ use Moon\infrastructure\Http\Request;
 use Moon\infrastructure\Http\Route\Route;
 use Moon\infrastructure\Http\Route\TypeRoute;
 use Moon\infrastructure\Http\Response;
+use Moon\infrastructure\Http\Route\Router;
 
 class HttpEngine {
 
@@ -17,31 +18,9 @@ class HttpEngine {
         $this->executer = $executer;
     }
 
-    public function createCurrentRequest(): Request {
-        $request = new Request();
-        $request->setStatesGlobals();
-        return $request;
-    }
-
     public function pipeline(Request $request): Response {
-        $route = $this->makeRoute($request);
-        $response = $this->execRoute($route);
-        
+        $route = $this->router->handleRequest($request);
+        $response = $this->executer->execRoute($route);
         return $response;
-    }
-
-    private function execRoute(Route $route): Response {
-        if($route->type == TypeRoute::NotFound) {
-            return $this->notFount();
-        }
-        return $this->executer->execRoute($route);
-    }
-
-    private function makeRoute(Request $request): Route {
-        return $this->router->handleRequest($request);
-    }
-
-    private function notFount() {
-        return new Response(template: '404');
     }
 }
