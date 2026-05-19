@@ -21,11 +21,4 @@ class Headers {
     {
         return $this->headers[$name] ?? $default;
     }
-    
-    public function send(): void
-    {
-        foreach ($this->headers as $name => $value) {
-            header("$name: $value");
-        }
-    }
 }
