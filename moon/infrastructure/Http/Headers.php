@@ -21,4 +21,9 @@ class Headers {
     {
         return $this->headers[$name] ?? $default;
     }
+
+    public function all()
+    {
+        return $this->headers;
+    }
 }

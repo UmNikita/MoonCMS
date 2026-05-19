@@ -13,8 +13,25 @@ class Controller {
         $this->response = $response;
     }
 
-    protected function template(string $template): Response {
+    protected function setCookie() {
+
+    }
+
+    protected function setSession() {
+
+    }
+
+    protected function setHeader($key, $value) {
+
+    }
+
+    protected function show(string $template): Response {
         $this->response->setTemplate($template);
+        return $this->response;
+    }
+
+    protected function redirect(string $url): Response {
+        $this->response->setRedirectUrl($url);
         return $this->response;
     }
 }

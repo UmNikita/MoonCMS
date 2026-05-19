@@ -27,15 +27,12 @@ class Kernel {
     private function startTechServices(ServiceContainer $container) {
         $config = $container->get(ConfigManager::class);
         $config->build();
-        //$db = new Database('pgsql', 'localhost', '5432', 'test', 'postgres', 'sap');
-        //Container::registry($db);
     }
 
     private function proccessHttp(ServiceContainer $container) {
         $httpEngine = $container->get(HttpEngine::class);
         $request = $this->environment->getRequest();
         $response = $httpEngine->pipeline($request);
-        $viewEngine = $container->get(ViewEngine::class);
-        $viewEngine->render($response);
+        $this->environment->response($response);
     }
 }
