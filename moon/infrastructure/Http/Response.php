@@ -7,6 +7,7 @@ class Response {
     private int $statusCode;
     private string $template;
     private Headers $headers;
+    private ?string $kernelDir = null;
 
     public function __construct($statusCode = 200, $template = 'Example')
     {
@@ -16,6 +17,14 @@ class Response {
     public function getTemplate()
     {
         return $this->template;
+    }
+
+    public function setKernelDir(string $kernelDir) {
+        $this->kernelDir = $kernelDir;
+    }
+
+    public function getKernelDir(): ?string {
+        return $this->kernelDir;
     }
 
     public function setTemplate(string $template) {

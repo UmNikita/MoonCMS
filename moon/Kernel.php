@@ -28,7 +28,6 @@ class Kernel {
     private function startTechServices(ServiceContainer $container) {
         $config = $container->get(ConfigManager::class);
         $config->build();
-        //$db = new Database('pgsql', 'localhost', '5432', 'test', 'postgres', 'sap');
         $providerDispatcher = new ProviderDispatcher($container->get(PathResolver::class), $container);
         $providerDispatcher->boot();
     }
