@@ -1,9 +1,9 @@
 <?php
 
-use Moon\infrastructure\Http\Response;
+use Moon\infrastructure\Http\Controller;
 
-class AdminController {
+class AdminController extends Controller {
     public function index() {
-        return new Response(template: 'admin');
+        return $this->show('admin');
     }
 }
