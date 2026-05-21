@@ -13,6 +13,8 @@ use Moon\infrastructure\Http\HttpEngine;
 use Moon\infrastructure\DI\ServiceContainer;
 use Moon\infrastructure\Http\Request;
 use Moon\infrastructure\Render\ViewEngine;
+use Local\Models\TestModel;
+use Moon\infrastructure\Database\Migration\Schema;
 
 class Kernel {
 
@@ -32,6 +34,12 @@ class Kernel {
         $config->build();
         $databaseFactory = $container->get(DatabaseFactory::class);
         $databaseFactory->create();
+        $schema = $container->get(Schema::class);
+        $table = $schema->table("test");
+        // $table->id();
+        // $table->string("name");
+        // $table->create();
+        
         //$sqlBuilder = $container->get(SQLBuilder::class);
         //$sql = $sqlBuilder->table('posts');
         //print_r($sql->select(['ab', 'dx'])->limit(5)->distinct()->where('avb', 21, '>')->get());

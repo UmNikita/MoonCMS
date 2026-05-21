@@ -1,8 +1,9 @@
 <?php
 
-namespace Moon\infrastructure\Database;
+namespace Moon\infrastructure\Database\Migration;
 
-enum DataTypes {
+enum SchemaTypes {
+    case Id;
     case Int;
     case Double;
     case Char;
