@@ -17,10 +17,10 @@ class Schema {
         if($this->tableExist($table))
         {
             $columns = $this->setColumnsTable($table);
-            return new SchemaTable($table, $columns);
+            return new SchemaTable($this->db, $table, $columns);
         }
         else
-            return new SchemaTable($table);
+            return new SchemaTable($this->db, $table);
         
     }
 

@@ -2,6 +2,7 @@
 
 namespace Moon\infrastructure\Database\Migration;
 
+use Moon\infrastructure\Database\Database;
 use Moon\infrastructure\Database\Migration\packers\SchemaPacker;
 
 class SchemaTable {
@@ -9,12 +10,14 @@ class SchemaTable {
     private string $tableName;
     public array $columns;
     private SchemaPacker $packer;
+    private Database $db;
 
-    public function __construct(string $tableName, array $columns = [])
+    public function __construct(Database $db, string $tableName, array $columns = [])
     {
         $this->tableName = $tableName;
         $this->packer = new SchemaPacker($tableName);
         $this->columns = $columns;
+        $this->db = $db;
     }
     
     private function column(string $name, SchemaTypes $type): bool {
@@ -54,7 +57,8 @@ class SchemaTable {
     }
 
     public function create() {
-        print_r($this->packer->pack());
+        $query = $this->packer->pack();
+        $this->db->query($query);
     }
 
 }
