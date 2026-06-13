@@ -6,11 +6,17 @@ use Moon\infrastructure\Http\Environment;
 use Moon\infrastructure\PathResolver\PathResolver;
 use Moon\infrastructure\Config\ConfigManager;
 use Moon\infrastructure\Database\Database;
+use Moon\infrastructure\Database\DatabaseFactory;
+use Moon\infrastructure\Database\QueryTable;
+use Moon\infrastructure\Database\builder\SQLBuilder;
 use Moon\infrastructure\Http\HttpEngine;
 use Moon\infrastructure\DI\ServiceContainer;
 use Moon\infrastructure\Http\Request;
 use Moon\infrastructure\ProviderDispatcher\ProviderDispatcher;
 use Moon\infrastructure\Render\ViewEngine;
+use Local\Models\TestModel;
+use Moon\infrastructure\Database\Migration\MigrationManager;
+use Moon\infrastructure\Database\Migration\Schema;
 
 class Kernel {
 
@@ -28,6 +34,8 @@ class Kernel {
     private function startTechServices(ServiceContainer $container) {
         $config = $container->get(ConfigManager::class);
         $config->build();
+        $databaseFactory = $container->get(DatabaseFactory::class);
+        $databaseFactory->create();
         $providerDispatcher = new ProviderDispatcher($container->get(PathResolver::class), $container);
         $providerDispatcher->boot();
     }
