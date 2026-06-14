@@ -17,12 +17,20 @@ use Moon\infrastructure\Render\ViewEngine;
 use Local\Models\TestModel;
 use Moon\infrastructure\Database\Migration\MigrationManager;
 use Moon\infrastructure\Database\Migration\Schema;
+use Moon\infrastructure\User\Cookie;
+use Moon\infrastructure\User\Session;
+use Moon\infrastructure\User\SessionStorage;
+use PSpell\Config;
 
 class Kernel {
 
     private Environment $environment;
 
     public function run() {
+        if ($_SERVER['REQUEST_URI'] === '/favicon.ico') {
+            http_response_code(204);
+            return;
+        }
         $serviceContainer = new ServiceContainer();
         $this->environment = $serviceContainer->get(Environment::class);
         $this->environment->setCurrentEnvironment();
@@ -37,12 +45,16 @@ class Kernel {
         $databaseFactory->create();
         $providerDispatcher = new ProviderDispatcher($container->get(PathResolver::class), $container);
         $providerDispatcher->boot();
+        SessionStorage::init($container);
     }
 
     private function proccessHttp(ServiceContainer $container) {
         $httpEngine = $container->get(HttpEngine::class);
+        $session = $container->get(Session::class);
+        print_r($session->body());
         $request = $this->environment->getRequest();
         $response = $httpEngine->pipeline($request);
+        SessionStorage::save($container);
         $this->environment->response($response);
     }
 }
