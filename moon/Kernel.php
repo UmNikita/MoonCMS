@@ -28,7 +28,6 @@ class Kernel {
         $this->environment->setCurrentEnvironment();
         $this->startTechServices($serviceContainer);
         $this->proccessHttp($serviceContainer);
-        
     }
 
     private function startTechServices(ServiceContainer $container) {

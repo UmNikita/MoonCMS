@@ -2,19 +2,24 @@
 
 namespace Moon\infrastructure\Http;
 
+use Moon\infrastructure\User\Cookie;
+
 class Response {
 
     private int $statusCode;
     private string $template;
     private Headers $headers;
     private ?string $kernelDir = null;
+    private Cookie $cookie;
 
-    public function __construct($statusCode = 200, $template = 'Example')
+    public function __construct(Cookie $cookie, $statusCode = 200, $template = 'Example')
     {
         $this->statusCode = $statusCode;
         $this->template = $template;
         $this->headers = new Headers();
+        $this->cookie = $cookie;
     }
+
     public function getTemplate()
     {
         return $this->template;
@@ -40,6 +45,12 @@ class Response {
     public function acceptResponseHeaders() {
         foreach ($this->headers->all() as $key => $value) {
             header("$key: $value");
+        }
+    }
+
+    public function acceptCookie() {
+        foreach ($this->cookie->all() as $key => $value) {
+            setcookie($key, $value);
         }
     }
 }
