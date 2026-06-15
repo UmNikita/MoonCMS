@@ -1,6 +1,8 @@
 <?php 
 
-namespace Moon\infrastructure\User;
+namespace Moon\infrastructure\User\Session;
+
+use Moon\infrastructure\User\Cookie;
 
 class Session {
 

@@ -1,9 +1,10 @@
 <?php 
 
-namespace Moon\infrastructure\User;
+namespace Moon\infrastructure\User\Session;
 
 use Moon\infrastructure\Database\Database;
 use Moon\infrastructure\DI\ServiceContainer;
+use Moon\infrastructure\User\Cookie;
 
 class SessionStorage {
 
@@ -13,20 +14,19 @@ class SessionStorage {
             return;
         }
         $cookie = $container->get(Cookie::class);
-        $db = $container->get(Database::class);
         $body = $session->body();
         $json = json_encode($body);
         $base = base64_encode($json);
         $sessionId = $session->getSessionId();
         $cookie->set(Session::$keyName, $session->getSessionId());
-        $db->query("INSERT INTO session (session_id, body) VALUES (:session_id, :body)", [":session_id" => $sessionId, ":body" => $base]);
+        $sessionDb = new SessionDBGateway($container);
+        $sessionDb->addSession($sessionId, $base);
     }
 
     public static function init(ServiceContainer $container): void {
         $session = $container->get(Session::class);
-        $db = $container->get(Database::class);
-        $dbData = $db->query("SELECT body FROM session WHERE session_id = :session_id", [":session_id" => $session->getSessionId()]);
-        $data = $dbData->fetchAll()[0]['body'];
+        $sessionDb = new SessionDBGateway($container);
+        $data = $sessionDb->getBody($session->getSessionId());
         if(!$data) {
             return;
         }

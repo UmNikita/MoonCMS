@@ -18,9 +18,8 @@ use Local\Models\TestModel;
 use Moon\infrastructure\Database\Migration\MigrationManager;
 use Moon\infrastructure\Database\Migration\Schema;
 use Moon\infrastructure\User\Cookie;
-use Moon\infrastructure\User\Session;
-use Moon\infrastructure\User\SessionStorage;
-use PSpell\Config;
+use Moon\infrastructure\User\Session\Session;
+use Moon\infrastructure\User\Session\SessionStorage;
 
 class Kernel {
 
@@ -50,8 +49,8 @@ class Kernel {
 
     private function proccessHttp(ServiceContainer $container) {
         $httpEngine = $container->get(HttpEngine::class);
-        $session = $container->get(Session::class);
-        print_r($session->body());
+        //$session = $container->get(Session::class);
+        //$session->set('abc', 'dba');
         $request = $this->environment->getRequest();
         $response = $httpEngine->pipeline($request);
         SessionStorage::save($container);
