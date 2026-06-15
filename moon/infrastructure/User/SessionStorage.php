@@ -19,13 +19,13 @@ class SessionStorage {
         $base = base64_encode($json);
         $sessionId = $session->getSessionId();
         $cookie->set(Session::$keyName, $session->getSessionId());
-        $db->query("INSERT INTO sessions (session_id, body) VALUES (:session_id, :body)", [":session_id" => $sessionId, ":body" => $base]);
+        $db->query("INSERT INTO session (session_id, body) VALUES (:session_id, :body)", [":session_id" => $sessionId, ":body" => $base]);
     }
 
     public static function init(ServiceContainer $container): void {
         $session = $container->get(Session::class);
         $db = $container->get(Database::class);
-        $dbData = $db->query("SELECT body FROM sessions WHERE session_id = :session_id", [":session_id" => $session->getSessionId()]);
+        $dbData = $db->query("SELECT body FROM session WHERE session_id = :session_id", [":session_id" => $session->getSessionId()]);
         $data = $dbData->fetchAll()[0]['body'];
         if(!$data) {
             return;
