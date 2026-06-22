@@ -21,9 +21,9 @@ class Executer {
 
     public function execRoute(Route $route): Response
     {
-        if($route->type == TypeRoute::NotFound) {
-            return new Response(template: '404');
-        }
+        // if($route->type == TypeRoute::NotFound) {
+        //     return new Response(template: '404');
+        // }
         $controllerName = $this->getController($route);
         $controller = new $controllerName($this->response);
         $response = $this->callMethodController($route, $controller, $controllerName);
@@ -58,17 +58,17 @@ class Executer {
             throw new ControllerException("Метод '{$methodName}' не найден в контроллере '{$controllerName}'");
         
         $response = call_user_func_array([$controller, $methodName], []);
-        if ($route->kernelDir != null)
-            $response->setKernelDir($route->kernelDir);
+        if ($route->module != null)
+            $response->setModule($route->module);
 
         return $response;
     }
 
     private function getControllerFile(PathResolver $pathResolver, Route $route): string {
-        if($route->kernelDir == null)
+        if($route->module == null)
             $controllersDir = $pathResolver->getFileFromDirectoryFramework(PathDirectoryType::Local, 'Controllers/');
         else
-            $controllersDir = $pathResolver->getFileFromDirectoryFramework(PathDirectoryType::Kernel, 'mvc/'.$route->kernelDir.'/Controllers/');
+            $controllersDir = $pathResolver->getFileFromDirectoryFramework(PathDirectoryType::Modules, $route->module.'/mvc'.'/Controllers/');
         
         if (!is_dir($controllersDir))
             throw new ControllerException("Директория контроллеров не найдена: " . $controllersDir);

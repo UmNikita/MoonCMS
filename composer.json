@@ -2,7 +2,8 @@
     "autoload": {
         "psr-4": {
             "Local\\": "local/",
-            "Moon\\": "moon/"
+            "Moon\\": "moon/",
+            "Modules\\": "modules/"
         }
     },
     "require-dev": {

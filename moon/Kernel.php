@@ -12,7 +12,7 @@ use Moon\infrastructure\Database\builder\SQLBuilder;
 use Moon\infrastructure\Http\HttpEngine;
 use Moon\infrastructure\DI\ServiceContainer;
 use Moon\infrastructure\Http\Request;
-use Moon\infrastructure\ProviderDispatcher\ProviderDispatcher;
+use Moon\infrastructure\ModuleDispatcher\ModuleDispatcher;
 use Moon\infrastructure\Render\ViewEngine;
 use Local\Models\TestModel;
 use Moon\infrastructure\Database\Migration\MigrationManager;
@@ -45,8 +45,8 @@ class Kernel {
         $config->build();
         $databaseFactory = $container->get(DatabaseFactory::class);
         $databaseFactory->create();
-        $providerDispatcher = new ProviderDispatcher($container->get(PathResolver::class), $container);
-        $providerDispatcher->boot();
+        $moduleDispatcher = new ModuleDispatcher($container->get(PathResolver::class), $container);
+        $moduleDispatcher->boot();
         SessionStorage::init($container);
     }
 
@@ -57,12 +57,12 @@ class Kernel {
         $user = new UserDTO("nikita", "nik@mail.ru", "psw");
         //$registration->register($user);
         //$login->login("nik@mail.ru", "psw");
-        if($login->auth()) {
-            print_r(123);
-        }
-        else {
-            print_r(90);
-        }
+        // if($login->auth()) {
+        //     print_r(123);
+        // }
+        // else {
+        //     print_r(90);
+        // }
         $request = $this->environment->getRequest();
         $response = $httpEngine->pipeline($request);
         SessionStorage::save($container);

@@ -9,7 +9,7 @@ class Response {
     private int $statusCode;
     private string $template;
     private Headers $headers;
-    private ?string $kernelDir = null;
+    private ?string $module = null;
     private Cookie $cookie;
 
     public function __construct(Cookie $cookie, $statusCode = 200, $template = 'Example')
@@ -25,12 +25,12 @@ class Response {
         return $this->template;
     }
 
-    public function setKernelDir(string $kernelDir) {
-        $this->kernelDir = $kernelDir;
+    public function setModule(string $module) {
+        $this->module = $module;
     }
 
-    public function getKernelDir(): ?string {
-        return $this->kernelDir;
+    public function getModule(): ?string {
+        return $this->module;
     }
 
     public function setTemplate(string $template) {

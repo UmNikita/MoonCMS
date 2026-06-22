@@ -1,12 +1,12 @@
 <?php
 
-namespace Moon\providers;
+namespace Modules\system\admin;
 
 use Moon\infrastructure\Config\ConfigManager;
-use Moon\infrastructure\ProviderDispatcher\Provider;
+use Moon\infrastructure\ModuleDispatcher\Starter;
 use Moon\infrastructure\Registry\Container;
 
-class SystemRoutesProvider implements Provider {
+class ModuleStarter implements Starter {
 
     private ConfigManager $configManager;
 
@@ -21,7 +21,7 @@ class SystemRoutesProvider implements Provider {
             '/moon-admin' => [
                 'controller' => 'AdminController',
                 'action' => 'index',
-                'kernelDir' => 'admin'
+                'module' => 'admin'
             ]
         ]);
     }

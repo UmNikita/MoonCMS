@@ -21,16 +21,16 @@ class ViewEngine {
 
     public function render(Response $response): void
     {
-        $this->setEnviroment($response->getKernelDir());
+        $this->setEnviroment($response->getModule());
         $template = $response->getTemplate();
         echo $this->twig->render($template . '.twig', []);
     }
 
-    private function setEnviroment(?string $kernelDir = null) {
-        if($kernelDir == null)
+    private function setEnviroment(?string $module = null) {
+        if($module == null)
             $path = $this->pathResolver->getFileFromDirectoryFramework(PathDirectoryType::Local, 'Templates');
         else
-            $path = $this->pathResolver->getFileFromDirectoryFramework(PathDirectoryType::Kernel, 'mvc/'.$kernelDir.'/Templates/');
+            $path = $this->pathResolver->getFileFromDirectoryFramework(PathDirectoryType::Modules, $module.'/mvc'.'/Templates/');
         $loader = new FilesystemLoader($path);
         $this->twig = new Environment($loader);
     }

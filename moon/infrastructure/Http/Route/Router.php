@@ -20,8 +20,8 @@ class Router {
     {
         $routConf = $this->configManager->get('routes.'.$request->rout);
         if($routConf) {
-            if(array_key_exists('kernelDir', $routConf)) {
-                $rout = new Route(controller: $routConf['controller'], action: $routConf['action'], kernelDir: $routConf['kernelDir']);
+            if(array_key_exists('module', $routConf)) {
+                $rout = new Route(controller: $routConf['controller'], action: $routConf['action'], module: $routConf['module']);
             }
             else {
                 $rout = new Route(controller: $routConf['controller'], action: $routConf['action']);

@@ -7,4 +7,5 @@ enum PathDirectoryType {
     case Public;
     case Local;
     case Kernel;
+    case Modules;
 }

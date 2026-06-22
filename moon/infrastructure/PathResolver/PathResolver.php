@@ -12,6 +12,7 @@ class PathResolver {
     private string $local_directory;
     private string $config_directory;
     private string $kernel_directory;
+    private string $modules_directory;
 
     public function __construct()
     {
@@ -20,6 +21,7 @@ class PathResolver {
         $this->local_directory = '/local/';
         $this->config_directory = '/config/';
         $this->kernel_directory = '/moon/';
+        $this->modules_directory = '/modules/system/';
         $this->checkIntegrityDirectories();
         
     }
@@ -64,6 +66,9 @@ class PathResolver {
             };
             case PathDirectoryType::Kernel: {
                 return $this->root.$this->kernel_directory.$root;
+            };
+             case PathDirectoryType::Modules: {
+                return $this->root.$this->modules_directory.$root;
             };
         }
     }
