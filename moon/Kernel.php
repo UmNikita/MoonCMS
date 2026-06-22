@@ -17,9 +17,12 @@ use Moon\infrastructure\Render\ViewEngine;
 use Local\Models\TestModel;
 use Moon\infrastructure\Database\Migration\MigrationManager;
 use Moon\infrastructure\Database\Migration\Schema;
+use Moon\infrastructure\User\Auth\Login;
+use Moon\infrastructure\User\Auth\Registration;
 use Moon\infrastructure\User\Cookie;
 use Moon\infrastructure\User\Session\Session;
 use Moon\infrastructure\User\Session\SessionStorage;
+use Moon\infrastructure\User\UserDTO;
 
 class Kernel {
 
@@ -49,8 +52,17 @@ class Kernel {
 
     private function proccessHttp(ServiceContainer $container) {
         $httpEngine = $container->get(HttpEngine::class);
-        //$session = $container->get(Session::class);
-        //$session->set('abc', 'dba');
+        $registration = $container->get(Registration::class);
+        $login = $container->get(Login::class);
+        $user = new UserDTO("nikita", "nik@mail.ru", "psw");
+        //$registration->register($user);
+        //$login->login("nik@mail.ru", "psw");
+        if($login->auth()) {
+            print_r(123);
+        }
+        else {
+            print_r(90);
+        }
         $request = $this->environment->getRequest();
         $response = $httpEngine->pipeline($request);
         SessionStorage::save($container);

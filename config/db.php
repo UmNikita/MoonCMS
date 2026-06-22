@@ -4,7 +4,7 @@ return [
     'driver' => 'pgsql',
     'host' => 'localhost',
     'port' => '5432',
-    'dbname' => 'test',
+    'dbname' => 'moon',
     'user' => 'postgres',
     'password' => 'sap'
 ];

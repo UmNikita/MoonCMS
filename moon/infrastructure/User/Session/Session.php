@@ -8,14 +8,17 @@ class Session {
 
     private string $sessionId;
     private array $body;
+    private bool $hasSession = false;
     public static string $keyName = "sessionID";
     public bool $isChange = false;
 
     public function __construct(Cookie $cookie)
     {
         $cookieValue = $cookie->get(self::$keyName);
-        if($cookieValue)
+        if($cookieValue) {
             $this->sessionId = $cookieValue;
+            $this->hasSession = true;
+        }   
         else
             $this->sessionId = bin2hex(random_bytes(32));
     }
@@ -40,4 +43,6 @@ class Session {
     public function getSessionId(): string {
         return $this->sessionId;
     }
+
+    public function hasSession(): bool { return $this->hasSession; }
 }

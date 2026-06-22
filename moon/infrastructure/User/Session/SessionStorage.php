@@ -19,13 +19,16 @@ class SessionStorage {
         $base = base64_encode($json);
         $sessionId = $session->getSessionId();
         $cookie->set(Session::$keyName, $session->getSessionId());
-        $sessionDb = new SessionDBGateway($container);
-        $sessionDb->addSession($sessionId, $base);
+        $sessionDb = new SessionDBGateway($container->get(Database::class));
+        if($sessionDb->hasSession($sessionId))
+            $sessionDb->changeSession($sessionId, $base);
+        else
+            $sessionDb->addSession($sessionId, $base);
     }
 
     public static function init(ServiceContainer $container): void {
         $session = $container->get(Session::class);
-        $sessionDb = new SessionDBGateway($container);
+        $sessionDb = new SessionDBGateway($container->get(Database::class));
         $data = $sessionDb->getBody($session->getSessionId());
         if(!$data) {
             return;
@@ -34,4 +37,10 @@ class SessionStorage {
         $body = json_decode($json, true);
         $session->setAll($body);
     }
+
+    public static function checkSession(Database $db, string $id) {
+        $sessionDb = new SessionDBGateway($db);
+        return $sessionDb->hasSession($id);
+    }
+
 }
