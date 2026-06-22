@@ -27,7 +27,7 @@ class PathResolver {
     }
 
     private function checkIntegrityDirectories() {
-        $requiredDirs = ['/config', '/local', '/moon'];
+        $requiredDirs = ['/config', '/local', '/moon', '/modules'];
         if(!$this->checkFiles($this->root, $requiredDirs)) {
             throw new AppIntegrityException('Нарушена целостность файлов.');
         }
@@ -37,9 +37,9 @@ class PathResolver {
         return $this->root;
     }
 
-    public function checkFilesWithExtension(string $path, array $list, string $extension='.php') {
+    public function checkFilesWithExtension(string $path, array $list, string $extension='php') {
         $requiredFiles = array_map(function($dir) use ($extension) {
-            return $dir . $extension;
+            return $dir . '.' . $extension;
         }, $list);
         return $this->checkFiles($path, $requiredFiles);
     }
@@ -79,5 +79,10 @@ class PathResolver {
             return $file !== '.' && $file !== '..';
         });
         return array_values($files);
+    }
+
+    public function saveFile(string $name, string $content, string $path, string $extension = "php") {
+        $dir = $path . $name . '.' . $extension;
+        file_put_contents($dir, $content);
     }
 }

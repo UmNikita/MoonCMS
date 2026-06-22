@@ -15,6 +15,8 @@ use Moon\infrastructure\Http\Request;
 use Moon\infrastructure\ModuleDispatcher\ModuleDispatcher;
 use Moon\infrastructure\Render\ViewEngine;
 use Local\Models\TestModel;
+use Moon\infrastructure\CodeGenerator\Generator;
+use Moon\infrastructure\CodeGenerator\GeneratorActions;
 use Moon\infrastructure\Database\Migration\MigrationManager;
 use Moon\infrastructure\Database\Migration\Schema;
 use Moon\infrastructure\User\Auth\Login;
@@ -66,6 +68,8 @@ class Kernel {
         $request = $this->environment->getRequest();
         $response = $httpEngine->pipeline($request);
         SessionStorage::save($container);
+        // $generator = $container->get(GeneratorActions::class);
+        // $generator->createPage("deep", "/deep");
         $this->environment->response($response);
     }
 }

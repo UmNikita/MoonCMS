@@ -3,6 +3,6 @@
 return [
     '/' => [
         'controller' => 'TestController',
-        'action' => 'test'
+        'action' => 'test',
     ]
 ];
