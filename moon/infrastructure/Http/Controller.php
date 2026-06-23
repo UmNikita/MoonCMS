@@ -6,9 +6,10 @@ use Moon\infrastructure\Http\Response;
 
 class Controller {
     
-    private Response $response;
+    protected Response $response;
+    protected Request $request;
 
-    public function __construct(Response $response)
+    public function __construct(Request $request, Response $response)
     {
         $this->response = $response;
     }

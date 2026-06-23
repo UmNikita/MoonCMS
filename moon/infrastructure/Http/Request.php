@@ -18,4 +18,7 @@ class Request {
         $this->headers = $headers;
         $this->body = $body;
     }
+
+    public function getMethod() { return $this->method; }
+    public function getBody() { return $this->body; }
 }

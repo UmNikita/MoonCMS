@@ -16,9 +16,24 @@ class Router {
         $this->configManager = $configManager;
     }
 
-    public function handleRequest(Request $request): Route
+    public function handleRequest(Request $request, bool $isApi): Route
     {
-        $routConf = $this->configManager->get('routes.'.$request->rout);
+        if($isApi) {
+            $r = $request->rout;  
+            switch($request->getMethod()) {
+                case "GET": {
+                    $routConf = $this->configManager->get('rest.'.substr($r, 4).':get');
+                    break;
+                }
+                case "POST": {
+                    $routConf = $this->configManager->get('rest.'.substr($r, 4).':post');
+                    break;
+                }
+            }
+        }
+        else {
+            $routConf = $this->configManager->get('routes.'.$request->rout);
+        }
         if($routConf) {
             $protection = false;
             $authVisible = true;

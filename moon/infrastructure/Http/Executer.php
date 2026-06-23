@@ -12,11 +12,13 @@ class Executer {
 
     private PathResolver $pathResolver;
     private Response $response;
+    private Request $request;
 
-    public function __construct(PathResolver $pathResolver, Response $response)
+    public function __construct(PathResolver $pathResolver, Response $response, Request $request)
     {
         $this->pathResolver = $pathResolver;
         $this->response = $response;
+        $this->request = $request;
     }
 
     public function execRoute(Route $route): Response
@@ -25,7 +27,7 @@ class Executer {
         //     return new Response(template: '404');
         // }
         $controllerName = $this->getController($route);
-        $controller = new $controllerName($this->response);
+        $controller = new $controllerName($this->request, $this->response);
         $response = $this->callMethodController($route, $controller, $controllerName);
         return $response;
     }
@@ -46,9 +48,12 @@ class Executer {
 
         require $controllerFile;
 
+        
+
         if (!class_exists($controllerName))
             throw new ControllerException("Класс контроллера '{$controllerName}' не найден в файле");
         
+
         return $controllerName;
     }
 

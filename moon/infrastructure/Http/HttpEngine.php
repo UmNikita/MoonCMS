@@ -24,7 +24,22 @@ class HttpEngine {
     }
 
     public function pipeline(Request $request): Response {
-        $route = $this->router->handleRequest($request);
+        if (str_starts_with($request->rout, '/api/')) {
+            return $this->restPipeline($request);
+        }
+        else {
+            return $this->defaultPipeline($request);
+        }
+    }
+    
+    private function restPipeline(Request $request): Response {
+        $route = $this->router->handleRequest($request, true);
+        $response = $this->executer->execRoute($route);
+        return $response;
+    }
+
+    private function defaultPipeline(Request $request): Response {
+        $route = $this->router->handleRequest($request, false);
         $auth = $this->login->auth();
         if($route->protection) {
             if ($auth) {

@@ -11,6 +11,8 @@ class Response {
     private Headers $headers;
     private ?string $module = null;
     private Cookie $cookie;
+    private array $body;
+    private bool $isApi;
 
     public function __construct(Cookie $cookie, $statusCode = 200, $template = 'Example')
     {
@@ -18,6 +20,7 @@ class Response {
         $this->template = $template;
         $this->headers = new Headers();
         $this->cookie = $cookie;
+        $this->isApi = false;
     }
 
     public function getTemplate()
@@ -52,5 +55,22 @@ class Response {
         foreach ($this->cookie->all() as $key => $value) {
             setcookie($key, $value);
         }
+    }
+
+    public function setRestApi() {
+        $this->headers->set("Content-Type", 'application/json');
+        $this->isApi = true;
+    }
+
+    public function setBody(array $body) {
+        $this->body = $body;
+    }
+
+    public function hasApi() {
+        return $this->isApi;
+    }
+
+    public function getBody() {
+        return $this->body;
     }
 }

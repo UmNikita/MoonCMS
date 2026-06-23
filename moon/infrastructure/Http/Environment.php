@@ -27,14 +27,25 @@ class Environment {
         $rout = $_SERVER['REQUEST_URI'];
         $method = $_SERVER['REQUEST_METHOD'];
         $query_params = $_GET;
-        $this->request->setStates($rout, $method, $query_params, $this->headersRequest, null);
+
+        $json = file_get_contents('php://input');
+        $data = json_decode($json, true);
+
+        $this->request->setStates($rout, $method, $query_params, $this->headersRequest, $data);
         $this->cookie->setCookie($_COOKIE);
     }
 
     public function response(Response $response) {
         $response->acceptResponseHeaders();
-        $response->acceptCookie();
-        $this->viewEngine->render($response);
+
+        if($response->hasApi()) {
+            echo json_encode($response->getBody(), JSON_UNESCAPED_UNICODE);
+        } 
+        else {
+            $response->acceptCookie();
+            $this->viewEngine->render($response);
+        }
+        
     }
 
     public function getRequest(): Request {
