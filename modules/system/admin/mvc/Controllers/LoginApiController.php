@@ -19,7 +19,8 @@ class LoginApiController extends RestController {
         $body = $this->request->getBody();
         $email = $body['email'];
         $password = $body['password'];
-        if($this->login->login($email, $password))
+        $isLogin = $this->login->login($email, $password);
+        if($isLogin)
             $res = ["success" => true];
         else
             $res = ["success" => false];

@@ -51,9 +51,9 @@ class Response {
         }
     }
 
-    public function acceptCookie() {
+    public function acceptCookie(string $path="/") {
         foreach ($this->cookie->all() as $key => $value) {
-            setcookie($key, $value);
+            setcookie($key, $value, path:$path);
         }
     }
 

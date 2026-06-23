@@ -12,16 +12,62 @@
         </div>
         <div id="container">
             <div class="field">
-                <p>Логин</p>
-                <input>
+                <p>Почта</p>
+                <input id="emailField">
             </div>
             <div class="field">
                 <p>Пароль</p>
-                <input>
+                <input id="pswField">
             </div>
+            <p id="warning"></p>
             <button>Войти</button>
         </div>
     </main>
+    <script>
+        const btn = document.querySelector('button');
+        const emailField = document.querySelector('#emailField');
+        const pswField = document.querySelector('#pswField');
+        const warning = document.querySelector('#warning');
+        btn.addEventListener('click', (e) => {
+            const email = emailField.value;
+            const psw = pswField.value;
+            warning.innerHTML = "";
+
+            if(email.length == 0)
+                emailField.style.border = "1px solid #8b2c2c";
+            else
+                emailField.style.border = "1px solid #3d3d3d";
+
+            if(psw.length == 0)
+                pswField.style.border = "1px solid #8b2c2c";
+            else
+                pswField.style.border = "1px solid #3d3d3d";
+
+            if(psw.length == 0 || email.length == 0)
+                return;
+
+            fetch('/api/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    email: email,
+                    password: psw
+                })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if(data.success == true) {
+                    window.location.replace("/moon-admin");
+                }
+                else {
+                    warning.innerHTML = "Неверный логин или пароль";
+                }
+            })
+            .catch(err => console.error(err));
+        });
+    </script>
     <style>
         * {
             margin: 0;
@@ -63,6 +109,10 @@
             height: 35px;
             width: 300px;
             margin-top: 10px;
+        }
+        #warning {
+            margin-left: 25px;
+            color: #8b2c2c;
         }
         button {
             height: 35px;

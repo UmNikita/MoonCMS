@@ -37,12 +37,12 @@ class Environment {
 
     public function response(Response $response) {
         $response->acceptResponseHeaders();
+        $response->acceptCookie();
 
         if($response->hasApi()) {
             echo json_encode($response->getBody(), JSON_UNESCAPED_UNICODE);
         } 
         else {
-            $response->acceptCookie();
             $this->viewEngine->render($response);
         }
         
