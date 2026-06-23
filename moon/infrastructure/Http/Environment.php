@@ -8,9 +8,7 @@ use Moon\infrastructure\User\Cookie;
 class Environment {
 
     private Headers $headersRequest;
-    private Headers $headersResponse;
     private Request $request;
-    private Response $response;
     private ViewEngine $viewEngine;
     private Cookie $cookie;
     

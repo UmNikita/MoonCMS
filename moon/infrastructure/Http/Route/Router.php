@@ -20,11 +20,19 @@ class Router {
     {
         $routConf = $this->configManager->get('routes.'.$request->rout);
         if($routConf) {
+            $protection = false;
+            $authVisible = true;
+            if(array_key_exists('protection', $routConf)) {
+                $protection = $routConf['protection'];
+            }
+            if(array_key_exists('authVisible', $routConf)) {
+                $authVisible = $routConf['authVisible'];
+            }
             if(array_key_exists('module', $routConf)) {
-                $rout = new Route(controller: $routConf['controller'], action: $routConf['action'], module: $routConf['module']);
+                $rout = new Route(controller: $routConf['controller'], action: $routConf['action'], module: $routConf['module'], protection: $protection, authVisible: $authVisible);
             }
             else {
-                $rout = new Route(controller: $routConf['controller'], action: $routConf['action']);
+                $rout = new Route(controller: $routConf['controller'], action: $routConf['action'], protection: $protection, authVisible: $authVisible);
             }
         }
         else {

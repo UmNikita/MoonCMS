@@ -4,7 +4,6 @@ namespace Modules\system\admin;
 
 use Moon\infrastructure\Config\ConfigManager;
 use Moon\infrastructure\ModuleDispatcher\Starter;
-use Moon\infrastructure\Registry\Container;
 
 class ModuleStarter implements Starter {
 
@@ -21,7 +20,14 @@ class ModuleStarter implements Starter {
             '/moon-admin' => [
                 'controller' => 'AdminController',
                 'action' => 'index',
-                'module' => 'admin'
+                'module' => 'admin',
+                'protection' => true
+            ],
+            '/login' => [
+                'controller' => 'LoginController',
+                'action' => 'index',
+                'module' => 'admin',
+                'authVisible' => false
             ]
         ]);
     }

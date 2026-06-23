@@ -57,12 +57,6 @@ class Kernel {
         $user = new UserDTO("nikita", "nik@mail.ru", "psw");
         //$registration->register($user);
         //$login->login("nik@mail.ru", "psw");
-        // if($login->auth()) {
-        //     print_r(123);
-        // }
-        // else {
-        //     print_r(90);
-        // }
         $request = $this->environment->getRequest();
         $response = $httpEngine->pipeline($request);
         SessionStorage::save($container);
