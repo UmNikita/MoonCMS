@@ -1,6 +1,8 @@
 <?php
 
 namespace Moon\infrastructure\Http;
+
+use Moon\infrastructure\DI\ServiceContainer;
 use Moon\infrastructure\Http\Route\Route;
 use Moon\infrastructure\PathResolver\PathResolver;
 use Moon\infrastructure\PathResolver\PathDirectoryType;
@@ -13,6 +15,7 @@ class Executer {
     private PathResolver $pathResolver;
     private Response $response;
     private Request $request;
+    private ServiceContainer $container;
 
     public function __construct(PathResolver $pathResolver, Response $response, Request $request)
     {
@@ -21,13 +24,17 @@ class Executer {
         $this->request = $request;
     }
 
+    public function setContainer(ServiceContainer $container) {
+        $this->container = $container;
+    }
+
     public function execRoute(Route $route): Response
     {
         // if($route->type == TypeRoute::NotFound) {
         //     return new Response(template: '404');
         // }
         $controllerName = $this->getController($route);
-        $controller = new $controllerName($this->request, $this->response);
+        $controller = $this->container->get($controllerName);
         $response = $this->callMethodController($route, $controller, $controllerName);
         return $response;
     }
@@ -47,8 +54,6 @@ class Executer {
             throw new ControllerException("Контроллер '{$controllerName}' не найден по пути: {$controllerFile}");
 
         require $controllerFile;
-
-        
 
         if (!class_exists($controllerName))
             throw new ControllerException("Класс контроллера '{$controllerName}' не найден в файле");

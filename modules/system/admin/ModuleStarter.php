@@ -30,6 +30,13 @@ class ModuleStarter implements Starter {
                 'authVisible' => false
             ]
         ]);
+        $this->configManager->add('rest', [
+            '/login:post' => [
+                'controller' => 'LoginApiController',
+                'action' => 'login',
+                'module' => 'admin'
+            ]
+        ]);
     }
 
 }

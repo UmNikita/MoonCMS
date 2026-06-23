@@ -52,6 +52,7 @@ class Kernel {
 
     private function proccessHttp(ServiceContainer $container) {
         $httpEngine = $container->get(HttpEngine::class);
+        $httpEngine->setContainer($container);
         $registration = $container->get(Registration::class);
         $login = $container->get(Login::class);
         $user = new UserDTO("nikita", "nik@mail.ru", "psw");

@@ -1,6 +1,8 @@
 <?php
 
 namespace Moon\infrastructure\Http;
+
+use Moon\infrastructure\DI\ServiceContainer;
 use Moon\infrastructure\Http\Request;
 use Moon\infrastructure\Http\Route\Route;
 use Moon\infrastructure\Http\Route\TypeRoute;
@@ -14,6 +16,7 @@ class HttpEngine {
     private Executer $executer;
     private Login $login;
     private Response $response;
+    private ServiceContainer $container;
 
     public function __construct(Router $router, Executer $executer, Login $login, Response $response)
     {
@@ -21,6 +24,11 @@ class HttpEngine {
         $this->executer = $executer;
         $this->login = $login;
         $this->response = $response;
+    }
+
+    public function setContainer(ServiceContainer $container) {
+        $this->container = $container;
+        $this->executer->setContainer($this->container);
     }
 
     public function pipeline(Request $request): Response {
